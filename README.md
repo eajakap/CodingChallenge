@@ -14,7 +14,7 @@ The file has entries as under –
 ### Build the program: 
  -         mvn clean install
 ###	Run the Spring Boot Application
-  -        java jar target/cityconnect-0.0.1-SNAPSHOT.jar
+  -        java -jar target/cityconnect-0.0.1-SNAPSHOT.jar
 ###	Test the spring boot application
   #### Go to the Web browser and execute the following commands:
   ######  Check Connections:
