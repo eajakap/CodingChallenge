@@ -56,11 +56,11 @@ public class CityConnectController {
 			@RequestParam(name = "destination", required = false) String destination) {
 		logger.info("findAll: origin= " + origin + ", destination= " + destination);
 		if (StringUtils.isNotEmpty(origin) && StringUtils.isNotEmpty(destination)) {
-			return (List<CityConnect>) service.findByOriginDestination(origin.toUpperCase(), destination.toUpperCase());
+			return (List<CityConnect>) service.findByOriginDestination(origin, destination);
 		} else if (StringUtils.isNotEmpty(origin)) {
-			return (List<CityConnect>) service.findByOrigin(origin.toUpperCase());
+			return (List<CityConnect>) service.findByOrigin(origin);
 		} else if (StringUtils.isNotEmpty(destination)) {
-			return (List<CityConnect>) service.findByDestination(destination.toUpperCase());
+			return (List<CityConnect>) service.findByDestination(destination);
 		}
 		return (List<CityConnect>) service.lookup();
 	}

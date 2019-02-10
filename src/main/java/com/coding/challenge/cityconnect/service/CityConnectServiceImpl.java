@@ -50,9 +50,11 @@ public class CityConnectServiceImpl implements CityConnectService {
 	 * Creates City Connection Graph and persists the entries in the DB.
 	 */
 	public CityConnect createCityConnect(String origin, String destination) {
-		CityConnect cityConnect = new CityConnect(origin, destination);
-		graph.addNewEdge(origin, destination);
-		List<CityConnect> cityConnectList = (List<CityConnect>) cityConnectRepository.findByOrigin(origin);
+		String upperCaseOrigin = origin.toUpperCase();
+		String upperCaseDestination = destination.toUpperCase();
+		CityConnect cityConnect = new CityConnect(upperCaseOrigin, upperCaseDestination);
+		graph.addNewEdge(upperCaseOrigin, upperCaseDestination);
+		List<CityConnect> cityConnectList = (List<CityConnect>) cityConnectRepository.findByOrigin(upperCaseOrigin);
 		if (cityConnectList == null) {
 			return cityConnectRepository.save(cityConnect);
 		} else if (!cityConnectList.contains(cityConnect)) {
@@ -66,7 +68,7 @@ public class CityConnectServiceImpl implements CityConnectService {
 	 */
 	@Override
 	public boolean isConnected(String origin, String destination) {
-		boolean result = graph.isConnected(origin, destination);
+		boolean result = graph.isConnected(origin.toUpperCase(), destination.toUpperCase());
 		return result;
 	}
 
@@ -83,7 +85,7 @@ public class CityConnectServiceImpl implements CityConnectService {
 	 */
 	@Override
 	public Iterable<CityConnect> findByOrigin(String origin) {
-		return cityConnectRepository.findByOrigin(origin);
+		return cityConnectRepository.findByOrigin(origin.toUpperCase());
 	}
 
 	/**
@@ -91,7 +93,7 @@ public class CityConnectServiceImpl implements CityConnectService {
 	 */
 	@Override
 	public Iterable<CityConnect> findByDestination(String destination) {
-		return cityConnectRepository.findByDestination(destination);
+		return cityConnectRepository.findByDestination(destination.toUpperCase());
 	}
 
 	/**
@@ -100,8 +102,10 @@ public class CityConnectServiceImpl implements CityConnectService {
 	 */
 	@Override
 	public List<CityConnect> findByOriginDestination(String origin, String destination) {
-		CityConnect cityConnect = new CityConnect(origin, destination);
-		List<CityConnect> cityConnectList = (List<CityConnect>) cityConnectRepository.findByOrigin(origin);
+		String upperCaseOrigin = origin.toUpperCase();
+		String upperCaseDestination = destination.toUpperCase();
+		CityConnect cityConnect = new CityConnect(upperCaseOrigin, upperCaseDestination);
+		List<CityConnect> cityConnectList = (List<CityConnect>) cityConnectRepository.findByOrigin(upperCaseOrigin);
 		if (cityConnectList != null & cityConnectList.contains(cityConnect)) {
 			int index = cityConnectList.indexOf(cityConnect);
 			return Collections.singletonList(cityConnectList.get(index));

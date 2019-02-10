@@ -18,14 +18,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.coding.challenge.cityconnect.model.CityConnect;
-import com.coding.challenge.cityconnect.service.CityConnectServiceImpl;
+import com.coding.challenge.cityconnect.service.CityConnectService;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(CityConnectController.class)
 public class CityConnectControllerTests {
 
 	@MockBean
-	private CityConnectServiceImpl cityConnectService;
+	private CityConnectService cityConnectService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -39,15 +39,15 @@ public class CityConnectControllerTests {
 		this.mockMvc.perform(get("/list")).andExpect(status().isOk())
 				.andExpect(content().string(containsString("\"origin\":\"NEWARK\",\"destination\":\"BOSTON\"")));
 
-		Mockito.when(cityConnectService.findByOrigin("NEWARK")).thenReturn(cityConnectedList);
+		Mockito.when(cityConnectService.findByOrigin("Newark")).thenReturn(cityConnectedList);
 		this.mockMvc.perform(get("/list?origin=Newark")).andExpect(status().isOk())
 				.andExpect(content().string(containsString("\"origin\":\"NEWARK\",\"destination\":\"BOSTON\"")));
 
-		Mockito.when(cityConnectService.findByDestination("BOSTON")).thenReturn(cityConnectedList);
+		Mockito.when(cityConnectService.findByDestination("Boston")).thenReturn(cityConnectedList);
 		this.mockMvc.perform(get("/list?destination=Boston")).andExpect(status().isOk())
 				.andExpect(content().string(containsString("\"origin\":\"NEWARK\",\"destination\":\"BOSTON\"")));
 
-		Mockito.when(cityConnectService.findByOriginDestination("NEWARK", "BOSTON")).thenReturn(cityConnectedList);
+		Mockito.when(cityConnectService.findByOriginDestination("Newark", "Boston")).thenReturn(cityConnectedList);
 		this.mockMvc.perform(get("/list?origin=Newark&destination=Boston")).andExpect(status().isOk())
 				.andExpect(content().string(containsString("\"origin\":\"NEWARK\",\"destination\":\"BOSTON\"")));
 	}

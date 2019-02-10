@@ -75,8 +75,8 @@ public class CityConnectFileReader {
 		if (StringUtils.isNotEmpty(line)) {
 			String[] cities = line.split(",");
 			if (cities.length > 1) {
-				String origin = cities[0].trim().toUpperCase();
-				String destination = cities[1].trim().toUpperCase();
+				String origin = cities[0].trim();
+				String destination = cities[1].trim();
 				String key = getCityConnectMapKey(origin, destination);
 				cityConnectMap.putIfAbsent(key, new CityConnect(origin, destination));
 			}

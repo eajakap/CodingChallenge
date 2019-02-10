@@ -36,8 +36,8 @@ public class CityConnectServiceImplTests {
 	@Test
 	public void testFindByOrigin() {
 		List<CityConnect> cityConnectedList = new ArrayList<>();
-		cityConnectedList.add(new CityConnect("Newark", "Boston"));
-		Mockito.when(cityConnectRepository.findByOrigin("Newark")).thenReturn(cityConnectedList);
+		cityConnectedList.add(new CityConnect("NEWARK", "BOSTON"));
+		Mockito.when(cityConnectRepository.findByOrigin("NEWARK")).thenReturn(cityConnectedList);
 
 		List<CityConnect> list = (List<CityConnect>) (cityConnectService.findByOrigin("Newark"));
 		assertEquals(list.size(), 1);
@@ -47,19 +47,24 @@ public class CityConnectServiceImplTests {
 	@Test
 	public void testFindByDestination() {
 		List<CityConnect> cityConnectedList = new ArrayList<>();
-		cityConnectedList.add(new CityConnect("Newark", "Boston"));
-		Mockito.when(cityConnectRepository.findByDestination("Boston")).thenReturn(cityConnectedList);
-		List<CityConnect> list = (List<CityConnect>) (cityConnectService.findByDestination("Boston"));
+		cityConnectedList.add(new CityConnect("NEWARK", "BOSTON"));
+		Mockito.when(cityConnectRepository.findByDestination("BOSTON")).thenReturn(cityConnectedList);
+		List<CityConnect> list = (List<CityConnect>) (cityConnectService.findByDestination("BOSTON"));
 		assertEquals(list.size(), 1);
 	}
 
 	@Test
 	public void testFindByOriginDestination() {
 		List<CityConnect> cityConnectedList = new ArrayList<>();
-		cityConnectedList.add(new CityConnect("Newark", "Boston"));
-		Mockito.when(cityConnectRepository.findByOrigin("Newark")).thenReturn(cityConnectedList);
-		List<CityConnect> list = (List<CityConnect>) (cityConnectService.findByOriginDestination("Newark", "Boston"));
+		cityConnectedList.add(new CityConnect("NEWARK", "BOSTON"));
+
+		Mockito.when(cityConnectRepository.findByOrigin("NEWARK")).thenReturn(cityConnectedList);
+		List<CityConnect> list = (List<CityConnect>) (cityConnectService.findByOriginDestination("NEWARK", "BOSTON"));
 		assertEquals(list.size(), 1);
+
+		Mockito.when(cityConnectRepository.findByOrigin("NEW YORK")).thenReturn(cityConnectedList);
+		list = (List<CityConnect>) (cityConnectService.findByOriginDestination("NEW YORK", "BOSTON"));
+		assertEquals(null, list);
 	}
 
 	@Test
@@ -92,7 +97,27 @@ public class CityConnectServiceImplTests {
 		cityConnectedList.add(new CityConnect("Chicago", "Philadelphia"));
 		cityConnectedList.add(new CityConnect("New York", "Boston"));
 		cityConnectedList.add(new CityConnect("Newark", "New York"));
-		Mockito.when(graph.isConnected("Newark", "Boston")).thenReturn(true);
+		cityConnectedList.add(new CityConnect("BOSTON", "BALTIMORE"));
+
+		CityConnect cc1 = new CityConnect("NEWARK", "BOSTON");
+		Mockito.when(cityConnectRepository.save(cc1)).thenReturn(cc1);
+		Mockito.when(cityConnectRepository.findByOrigin("NEWARK")).thenReturn(cityConnectedList);
+		CityConnect cc2 = cityConnectService.createCityConnect("Newark", "Boston");
+		assertEquals(cc1, cc2);
+
+		cc1 = new CityConnect("CHICAGO", "PHILADELPHIA");
+		Mockito.when(cityConnectRepository.save(cc1)).thenReturn(cc1);
+		Mockito.when(cityConnectRepository.findByOrigin("CHICAGO")).thenReturn(null);
+		cc2 = cityConnectService.createCityConnect("Chicago", "Philadelphia");
+		assertEquals(cc1, cc2);
+
+		cc1 = new CityConnect("BOSTON", "BALTIMORE");
+		Mockito.when(cityConnectRepository.save(cc1)).thenReturn(cc1);
+		Mockito.when(cityConnectRepository.findByOrigin("BOSTON")).thenReturn(cityConnectedList);
+		cc2 = cityConnectService.createCityConnect("Boston", "Baltimore");
+		assertEquals(null, cc2);
+
+		Mockito.when(graph.isConnected("NEWARK", "BOSTON")).thenReturn(true);
 		boolean result = cityConnectService.isConnected("Newark", "Boston");
 		assertTrue(result);
 	}
